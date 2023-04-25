@@ -1,0 +1,8 @@
+1 - Read file, split into two parts by the blank line:
+1.1 - First transform lines into arrays or lists
+1.2 - Second create function to transform orders into movements between arrays (reorder arrays)
+2- Get a string with the top element of each array
+
+
+
+GGJHLDWWR

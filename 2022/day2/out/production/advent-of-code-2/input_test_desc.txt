@@ -1,0 +1,10 @@
+A -> Rock -> 1
+B -> Paper -> 2
+C -> Scissors -> 3
+
+X -> Loose -> 0
+Y -> Draw -> 3
+Z -> Win -> 6
+
+test -> 12
+real -> 13022
