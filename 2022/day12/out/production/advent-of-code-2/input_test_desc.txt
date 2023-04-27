@@ -1,0 +1,7 @@
+1 - Read each line
+2 - Split in two ranges (',')
+3 - Compare ranges, if range1[0] >= range2[0] && range1[len] >= range2[len]
+    -> Viceversa and taking care of range lengths
+    -> If true we found a contained range 
+4 - Summarize and return contained ranges
+
