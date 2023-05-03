@@ -10,15 +10,9 @@ public class SecondProblem {
 
     public static void main(String[] args) throws IOException {
         try (var lines = Files.lines(Path.of("src/input.txt"))) {
-            List<String> mapLines = lines.collect(Collectors.toList());
-            String[][] map = new String[mapLines.size()][mapLines.get(0).length()];
-            for (int i = 0; i < mapLines.size(); i++) {
-                char[] chars = mapLines.get(i).toCharArray();
-                for (int j = 0; j < chars.length; j++) {
-                    map[i][j] = String.valueOf(chars[j]);
-                }
-            }
+            System.out.println("lines = " + lines);
         }
+
     }
 
 }
