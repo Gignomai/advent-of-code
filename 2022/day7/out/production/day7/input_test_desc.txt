@@ -1,2 +1,0 @@
-1 - Get a list of the directories and its size
-2 -
