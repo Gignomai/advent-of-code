@@ -6,8 +6,8 @@ public class Part2 {
 
     public static final int MAX_SIZE = 3;
 
-    public Integer processCaloriesInput(List<String> calories) {
-        return getGroupedCaloriesTotals(calories).stream()
+    public Integer processLines(List<String> lines) {
+        return getGroupedCaloriesTotals(lines).stream()
                 .sorted(Collections.reverseOrder())
                 .limit(MAX_SIZE)
                 .mapToInt(Integer::intValue)
@@ -35,6 +35,6 @@ public class Part2 {
     }
 
     public boolean testPart2(List<String> fileName) {
-        return processCaloriesInput(fileName).equals(45000);
+        return processLines(fileName).equals(45000);
     }
 }

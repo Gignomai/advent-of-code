@@ -22,7 +22,7 @@ public class Day1 {
 
         Part2 part2 = new Part2();
         if(part2.testPart2(testLines)) {
-            System.out.println("Part 2 result: " + part2.processCaloriesInput(productionLines));
+            System.out.println("Part 2 result: " + part2.processLines(productionLines));
         } else {
             System.out.println("Error on Part2");
         }
