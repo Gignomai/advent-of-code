@@ -1,16 +1,10 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import java.util.List;
 
-public class SecondProblem {
-    public static void main(String[] args) throws IOException {
-        try (Stream<String> lines = Files.lines(Path.of("src/input.txt"))) {
-            Integer total = lines
-                    .mapToInt(SecondProblem::getScore)
-                    .sum();
-            System.out.println(total);
-        }
+public class Part2 {
+    public Integer processLines(List<String> lines) {
+        return lines.stream()
+                .mapToInt(Part2::getScore)
+                .sum();
     }
 
     private static Integer getScore(String strategy) {
@@ -36,5 +30,9 @@ public class SecondProblem {
             case 'Z' -> 6;
             default -> 0;
         };
+    }
+
+    public boolean test(List<String> fileName) {
+        return processLines(fileName).equals(12);
     }
 }
