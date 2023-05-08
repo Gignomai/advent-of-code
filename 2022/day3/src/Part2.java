@@ -1,21 +1,14 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SecondProblem {
-    private static final String LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static void main(String[] args) throws IOException {
-        List<String> rucksacks = Files.lines(Path.of("src/input.txt")).collect(Collectors.toList());
+public class Part2 {
 
-        Long total = getGroups(rucksacks).stream()
-                .mapToLong(SecondProblem::getPriority)
+    public Long processLines(List<String> lines) {
+        return getGroups(lines).stream()
+                .mapToLong(Part2::getPriority)
                 .sum();
 
-        System.out.println("total: \n" + total);
     }
 
     private static List<List<String>> getGroups(List<String> rucksacks) {
@@ -47,6 +40,10 @@ public class SecondProblem {
             }
         }
 
-        return LETTERS.indexOf(finding) + 1;
+        return Day3.LETTERS.indexOf(finding) + 1;
+    }
+
+    public boolean test(List<String> fileName) {
+        return processLines(fileName).equals(70L);
     }
 }
