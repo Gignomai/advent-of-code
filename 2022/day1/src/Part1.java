@@ -24,7 +24,7 @@ public class Part1 {
         return groupedCalories.get(0);
     }
 
-    public boolean testPart1(List<String> lines) {
+    public boolean test(List<String> lines) {
         return processLines(lines).equals(24000);
     }
 }

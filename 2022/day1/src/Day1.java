@@ -14,14 +14,14 @@ public class Day1 {
         List<String> productionLines = processFile(INPUT_FILE_NAME);
 
         Part1 part1 = new Part1();
-        if (part1.testPart1(testLines)) {
+        if (part1.test(testLines)) {
             System.out.println("Part 1 result: " + part1.processLines(productionLines));
         } else {
             System.out.println("Error on Part1");
         }
 
         Part2 part2 = new Part2();
-        if(part2.testPart2(testLines)) {
+        if(part2.test(testLines)) {
             System.out.println("Part 2 result: " + part2.processLines(productionLines));
         } else {
             System.out.println("Error on Part2");

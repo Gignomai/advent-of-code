@@ -34,7 +34,7 @@ public class Part2 {
         return totals;
     }
 
-    public boolean testPart2(List<String> fileName) {
+    public boolean test(List<String> fileName) {
         return processLines(fileName).equals(45000);
     }
 }
