@@ -3,11 +3,11 @@ import java.util.List;
 public class Part1 {
     public Integer processLines(List<String> lines) {
         return lines.stream()
-                .mapToInt(Part1::getScore)
+                .mapToInt(this::getScore)
                 .sum();
     }
 
-    private static Integer getScore(String s) {
+    private Integer getScore(String s) {
         Integer playValue = switch (s.charAt(s.length() - 1)) {
             case 'X' -> 1;
             case 'Y' -> 2;

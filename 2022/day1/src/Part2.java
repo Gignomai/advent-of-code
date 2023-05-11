@@ -14,7 +14,7 @@ public class Part2 {
                 .sum();
     }
 
-    private static List<Integer> getGroupedCaloriesTotals(List<String> calories) {
+    private List<Integer> getGroupedCaloriesTotals(List<String> calories) {
         List<Integer> totals = new ArrayList<>();
         int subtotal = 0;
 

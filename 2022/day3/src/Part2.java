@@ -6,12 +6,12 @@ public class Part2 {
 
     public Long processLines(List<String> lines) {
         return getGroups(lines).stream()
-                .mapToLong(Part2::getPriority)
+                .mapToLong(this::getPriority)
                 .sum();
 
     }
 
-    private static List<List<String>> getGroups(List<String> rucksacks) {
+    private List<List<String>> getGroups(List<String> rucksacks) {
         List<List<String>> groups = new ArrayList<>();
         List<String> group = new ArrayList<>();
         for (int i = 0; i < rucksacks.size(); i++) {
@@ -25,7 +25,7 @@ public class Part2 {
         return groups;
     }
 
-    private static Integer getPriority(List<String> group) {
+    private Integer getPriority(List<String> group) {
 
         char finding = ' ';
 
