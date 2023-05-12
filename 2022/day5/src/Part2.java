@@ -1,19 +1,17 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FirstProblem {
-    public static void main(String[] args) throws IOException {
+public class Part2 {
+    public static void main(String[] args) {
 
         try {
-            File myObj = new File("src/input_test.txt");
+            File myObj = new File("src/input.txt");
             Scanner myReader = new Scanner(myObj);
 
             List<String> stackRows = new ArrayList<>();
@@ -26,29 +24,37 @@ public class FirstProblem {
                 }
             }
             List<List<Character>> stacks = getStacksFromRows(stackRows);
-            System.out.println(stacks);
-
             while (myReader.hasNextLine()) {
+                String line = myReader.nextLine();
+
                 Pattern p = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
-                Matcher m = p.matcher(myReader.nextLine());
+                Matcher m = p.matcher(line);
                 if (m.find()) {
                     int moves = Integer.parseInt(m.group(1));
                     int origin = Integer.parseInt(m.group(2)) - 1;
                     int dest = Integer.parseInt(m.group(3)) - 1;
 
-                    for (int i = 0; i < moves; i++) {
-                        //stacks.get(dest).push(stacks.get(origin).get());
+                    List<Character> fromStack = stacks.get(origin);
+                    List<Character> toMove = new ArrayList<>();
+                    for (int i = fromStack.size() - moves; i < fromStack.size(); i++) {
+                        toMove.add(fromStack.get(i));
+                    }
+                    for (Character character : toMove) {
+                        stacks.get(dest).add(character);
+                    }
+                    for (int i = 0; i < toMove.size(); i++) {
+                        stacks.get(origin).remove(stacks.get(origin).size() - 1);
                     }
                 }
-                //System.out.println(stacks);
+//                System.out.println(stacks);
             }
             myReader.close();
 
-            /*String result = "";
-            for (Stack s: stacks) {
-                result += s.pop();
+            StringBuilder result = new StringBuilder();
+            for (List<Character> s : stacks) {
+                result.append(s.get(s.size() - 1));
             }
-            System.out.println(result);*/
+            System.out.println(result);
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException: An error occurred.");
             e.printStackTrace();
@@ -61,7 +67,7 @@ public class FirstProblem {
                 .replace(" ", "")
                 .length();
 
-        Character stacks[][] = new Character[stackNum][rowSize];
+        Character[][] stacks = new Character[stackNum][rowSize];
 
         for (int i = 0; i < rowSize; i++) {
             String row = stackRows.get(i);
@@ -75,11 +81,11 @@ public class FirstProblem {
         }
 
         List<List<Character>> charsStacks = new ArrayList<>();
-        for (int i = 0; i < stacks.length; i++) {
+        for (Character[] characters : stacks) {
             Stack<Character> stack = new Stack<>();
-            for (int j = stacks[i].length - 1; j >= 0; j--) {
-                if (stacks[i][j] != null) {
-                    stack.push(stacks[i][j]);
+            for (int j = characters.length - 1; j >= 0; j--) {
+                if (characters[j] != null) {
+                    stack.push(characters[j]);
                 }
             }
             charsStacks.add(stack);
@@ -87,5 +93,7 @@ public class FirstProblem {
         return charsStacks;
     }
 
-
+//    public boolean test(List<String> lines) {
+//        return processLines(lines).equals(4L);
+//    }
 }
