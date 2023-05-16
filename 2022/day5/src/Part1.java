@@ -42,20 +42,37 @@ public class Part1 {
 
     private static List<List<Character>> getStacksFromRows(List<String> stackRows) {
         String lastRow = stackRows.get(stackRows.size() - 1).trim();
-        int numberOfStacks = Integer.valueOf(lastRow.substring(lastRow.length() - 1));
+        int numberOfStacks = Integer.parseInt(lastRow.substring(lastRow.length() - 1));
 
         List<List<Character>> charsStacks = new ArrayList<>();
-
-
-        for (String row : stackRows) {
-            int rowCount = 0;
-            for (int i = 2; i < row.length(); i += 4) {
-                if (row.charAt(i) != ' ') {
-                    charsStacks.get(rowCount).add(row.charAt(i));
+        for (int i = 1; i <= numberOfStacks; i++) {
+            List<Character> stack = new ArrayList<>();
+            for (int j = 0; j < stackRows.size() - 2; j++) {
+                int col = i == 1 ? 1 : i + 3;
+                Character letter = stackRows.get(j).charAt(col);
+                if (!letter.equals(' ')) {
+                    stack.add(letter);
                 }
-                rowCount++;
             }
+            charsStacks.add(stack);
         }
+
+
+
+
+
+
+//        for (int r = 0; r < stackRows.size(); r++) {
+//            String row = stackRows.get(r);
+//            for (int i = 1; i < row.length(); i += 4) {
+//                if (row.charAt(i) != ' ') {
+//                    if (charsStacks.size() <= r) {
+//                        charsStacks.add(new ArrayList<>());
+//                    }
+//                    charsStacks.get(r).add(row.charAt(i));
+//                }
+//            }
+//        }
 
 //
 //        int rowSize = stackRows.size() - 1;
