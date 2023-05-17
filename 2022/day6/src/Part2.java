@@ -1,15 +1,17 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
-public class SecondProblem {
-    public static void main(String[] args) throws IOException {
-        Files.lines(Path.of("src/input.txt"))
-                .map(s -> SecondProblem.searchFirstStartOfPacketMarker(s))
-                .forEach(System.out::println);
+public class Part2 {
+    public Long processLines(List<String> lines) {
+        return lines.stream()
+                .map(this::searchFirstStartOfPacketMarker)
+                .findFirst()
+                .orElse(0L);
     }
 
-    private static long searchFirstStartOfPacketMarker(String s) {
+    private long searchFirstStartOfPacketMarker(String s) {
         long position = 0L;
 
         for (int i = 0; i < s.length(); i++) {
@@ -22,7 +24,7 @@ public class SecondProblem {
         return position;
     }
 
-    private static boolean hasDuplicatedLetters(String letters) {
+    private boolean hasDuplicatedLetters(String letters) {
         char[] part = letters.toCharArray();
         for (int i = 0; i < 14; i++) {
             for (int j = i + 1; j < 14; j++) {
@@ -32,5 +34,9 @@ public class SecondProblem {
             }
         }
         return true;
+    }
+
+    public boolean test(List<String> lines) {
+        return processLines(lines).equals(19L);
     }
 }
