@@ -1,31 +1,15 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SecondProblem {
-    public static void main(String[] args) throws IOException {
-        List<String> lines = Files.lines(Path.of("src/input.txt"))
-                .collect(Collectors.toList());
-
-        System.out.println(getGridFromLines(lines));
+public class Part2 {
+    public Integer processLines(List<String> lines) {
+        HeightMap map = new HeightMap(lines);
+        return getMaxScenicScore(map.grid);
     }
 
-    private static int getGridFromLines(List<String> lines) {
-        int numberOfLines = lines.size();
-        int lineLength = lines.get(0).length();
-        int[][] grid = new int[numberOfLines][lineLength];
-
-        for (int i = 0; i < numberOfLines; i++) {
-            char[] chars = lines.get(i).toCharArray();
-            for (int j = 0; j < lineLength; j++) {
-                grid[i][j] = Integer.parseInt(String.valueOf(chars[j]));
-            }
-        }
-
+    private Integer getMaxScenicScore(int[][] grid) {
+        int numberOfLines = grid.length;
+        int lineLength = grid[0].length;
         int maxScenicScore = 0;
-
 
         for (int i = 1; i < numberOfLines - 1; i++) {
             for (int j = 1; j < lineLength - 1; j++) {
@@ -77,4 +61,7 @@ public class SecondProblem {
         return maxScenicScore;
     }
 
+    public boolean test(List<String> lines) {
+        return processLines(lines).equals(8);
+    }
 }

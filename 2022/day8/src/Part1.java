@@ -1,35 +1,22 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class FirstProblem {
+public class Part1 {
 
-    public static void main(String[] args) throws IOException {
-        List<String> lines = Files.lines(Path.of("src/input.txt"))
-                .collect(Collectors.toList());
+    public Integer processLines(List<String> lines) {
+        HeightMap map = new HeightMap(lines);
 
-        System.out.println(getGridFromLines(lines));
+        return getVisibleTrees(map.grid);
     }
 
-    private static int getGridFromLines(List<String> lines) {
-        int numberOfLines = lines.size();
-        int lineLength = lines.get(0).length();
-        int[][] grid = new int[numberOfLines][lineLength];
-
-        for (int i = 0; i < numberOfLines; i++) {
-            char[] chars = lines.get(i).toCharArray();
-            for (int j = 0; j < lineLength; j++) {
-                grid[i][j] = Integer.parseInt(String.valueOf(chars[j]));
-            }
-        }
-
+    private Integer getVisibleTrees(int[][] grid) {
+        int numberOfLines = grid.length;
+        int lineLength = grid[0].length;
         int visibleTrees = (lineLength * 2) + ((numberOfLines - 2) * 2);
+
         for (int i = 1; i < numberOfLines - 1; i++) {
             for (int j = 1; j < lineLength - 1; j++) {
 
-                boolean isVisible = false;
+                boolean isVisible;
                 //Search North
                 boolean visibleTemp = true;
                 for (int row = i - 1; row >= 0; row--) {
@@ -82,4 +69,9 @@ public class FirstProblem {
         return visibleTrees;
     }
 
+
+
+    public boolean test(List<String> lines) {
+        return processLines(lines).equals(21);
+    }
 }
