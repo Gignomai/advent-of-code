@@ -12,7 +12,7 @@ public class Part1 {
         long position = 0L;
 
         for (int i = 0; i < s.length(); i++) {
-            if (hasDuplicatedLetters(s.substring(i, i + 4))) {
+            if (isMarker(s.substring(i, i + 4))) {
                 position = i + 4;
                 break;
             }
@@ -21,8 +21,8 @@ public class Part1 {
         return position;
     }
 
-    private boolean hasDuplicatedLetters(String letters) {
-        char[] part = letters.toCharArray();
+    private boolean isMarker(String slice) {
+        char[] part = slice.toCharArray();
         for (int i = 0; i < 4; i++) {
             for (int j = i + 1; j < 4; j++) {
                 if (part[i] == part[j]) {
