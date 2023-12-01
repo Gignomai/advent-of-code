@@ -4,27 +4,14 @@ import java.util.List;
 
 public class Part1 {
     public Integer processLines(List<String> lines) {
-        List<Integer> groupedCalories = new ArrayList<>();
-        int elfCalories = 0;
-
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (!line.isEmpty()) {
-                elfCalories += Integer.parseInt(line);
-                if (i == lines.size() - 1){
-                    groupedCalories.add(elfCalories);
-                }
-            } else {
-                groupedCalories.add(elfCalories);
-                elfCalories = 0;
-            }
-        }
-
-        groupedCalories.sort(Collections.reverseOrder());
-        return groupedCalories.get(0);
+        return lines.stream()
+                .map(s -> s.replaceAll("\\D*", ""))
+                .map(s -> s.charAt(0) + s.substring(s.length() - 1))
+                .mapToInt(Integer::valueOf)
+                .sum();
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(24000);
+        return processLines(lines).equals(142);
     }
 }
