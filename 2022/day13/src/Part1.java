@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -14,7 +15,7 @@ public class Part1 {
             }
             index++;
         }
-
+        System.out.println("total = " + total);
         return total;
     }
 
@@ -36,29 +37,50 @@ public class Part1 {
     }
 
     private List<String> getElementsOfList(String part) {
-        List<String> elements = new ArrayList<>();
-        int firstElementIndex = part.indexOf("[");
-        int lastElementIndex = part.lastIndexOf("]");
-
-        String element = part.substring(firstElementIndex + 1, lastElementIndex);
-
-        for(char c: element.toCharArray()) {
-
+        String listContent = part.substring(1, part.length() - 1);
+        if (listContent.isEmpty()) {
+            return new ArrayList<>();
         }
-
-        System.out.println("element = " + element);
-
-        return elements;
+        return Arrays.stream(listContent.split(",(?![^\\[]*\\])")).toList();
     }
 
     private boolean compareElements(List<String> leftElements, List<String> rightElements) {
-//        for (String s : leftElements) {
-//            System.out.println("s = " + s);
-//        }
-//        for (String s : rightElements) {
-//            System.out.println("s = " + s);
-//        }
-        return false;
+        if (leftElements.isEmpty() && !rightElements.isEmpty()) {
+            return true;
+        }
+        if (rightElements.isEmpty() && !leftElements.isEmpty()) {
+            return false;
+        }
+
+        String leftElement = leftElements.get(0);
+        String rightElement = rightElements.get(0);
+        System.out.println("rightElement = " + rightElement);
+        System.out.println("leftElement = " + leftElement);
+
+        try {
+            int left = Integer.parseInt(leftElement);
+            int right = Integer.parseInt(rightElement);
+
+            if (left < right) {
+                return true;
+            }
+            if (left > right) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            if (leftElement.startsWith("[") && !rightElement.startsWith("[")) {
+                rightElement = "[" + rightElement + "]";
+            }
+            if (rightElement.startsWith("[") && !leftElement.startsWith("[")) {
+                leftElement = "[" + leftElement + "]";
+            }
+
+            if (leftElement.startsWith("[") && rightElement.startsWith("[")) {
+                return compareElements(getElementsOfList(leftElement), getElementsOfList(rightElement));
+            }
+        }
+
+        return compareElements(leftElements.subList(1, leftElements.size() - 1), rightElements.subList(1, rightElements.size() - 1));
     }
 
     public boolean test(List<String> lines) {
