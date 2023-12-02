@@ -2,37 +2,41 @@ import java.util.List;
 
 public class Part2 {
     public Integer processLines(List<String> lines) {
-        return lines.stream()
-                .mapToInt(Part2::getScore)
-                .sum();
-    }
+        int total = 0;
 
-    private static Integer getScore(String strategy) {
-        return getPlayValue(strategy) + getRoundResult(getMyPlay(strategy));
-    }
+        for (String game : lines) {
+            //System.out.println("game = " + game);
+            String plays = game.split(":")[1];
+            int red = 1;
+            int green = 1;
+            int blue = 1;
+            for (String play : plays.split(";")) {
+                //System.out.println("play = " + play);
+                String[] draws = play.split(",");
+                for (String draw : draws) {
+                    String[] parts = draw.trim().split(" ");
+                    int number = Integer.parseInt(parts[0]);
+                    String color = parts[1];
+//                    System.out.println("number = " + number);
+//                    System.out.println("color = " + color);
+                    if (color.equals("red") && number > red) {
+                        red = number;
+                    }
+                    if (color.equals("green") && number > green) {
+                        green = number;
+                    }
+                    if (color.equals("blue") && number > blue) {
+                        blue = number;
+                    }
+                }
+            }
+            total += (red * green * blue);
+        }
 
-    private static Integer getPlayValue(String strategy) {
-        return switch (strategy) {
-            case "A Y", "B X", "C Z" -> 1;
-            case "A Z", "C X", "B Y" -> 2;
-            case "A X", "B Z", "C Y" -> 3;
-            default -> 0;
-        };
-    }
-
-    private static char getMyPlay(String strategy) {
-        return strategy.charAt(strategy.length() - 1);
-    }
-
-    private static Integer getRoundResult(char play) {
-        return switch (play) {
-            case 'Y' -> 3;
-            case 'Z' -> 6;
-            default -> 0;
-        };
+        return total;
     }
 
     public boolean test(List<String> fileName) {
-        return processLines(fileName).equals(12);
+        return processLines(fileName).equals(2286);
     }
 }

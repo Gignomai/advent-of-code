@@ -1,30 +1,38 @@
 import java.util.List;
 
 public class Part1 {
+
     public Integer processLines(List<String> lines) {
-        return lines.stream()
-                .mapToInt(this::getScore)
-                .sum();
-    }
+        int total = 0;
 
-    private Integer getScore(String s) {
-        Integer playValue = switch (s.charAt(s.length() - 1)) {
-            case 'X' -> 1;
-            case 'Y' -> 2;
-            case 'Z' -> 3;
-            default -> 0;
-        };
+        for (String game : lines) {
+            boolean isValid = true;
+            int id = Integer.parseInt(game.split(":")[0].split(" ")[1]);
+            String plays = game.split(":")[1];
 
-        Integer roundResult = switch (s) {
-            case "A X", "B Y", "C Z" -> 3;
-            case "A Y", "B Z", "C X" -> 6;
-            default -> 0;
-        };
+            for (String play : plays.split(";")) {
+                String[] draws = play.split(",");
+                for (String draw: draws) {
+                    String[] parts = draw.trim().split(" ");
+                    int number = Integer.parseInt(parts[0]);
+                    String color = parts[1];
+                    if ((color.equals("red") && number > 12)
+                            || (color.equals("green") && number > 13)
+                            || (color.equals("blue") && number > 14)) {
+                        isValid = false;
+                    }
+                }
+            }
 
-        return playValue + roundResult;
+            if (isValid) {
+                total += id;
+            }
+        }
+
+        return total;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(15);
+        return processLines(lines).equals(8);
     }
 }
