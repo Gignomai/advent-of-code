@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class Part1 {
 
     public Integer processLines(List<String> lines) {
-        Set<Integer> parts = new HashSet<>();
+        List<Integer> parts = new ArrayList<>();
         Map<Integer, Map<Integer, String>> numbers = new TreeMap<>();
         Map<Integer, List<Integer>> symbols = new TreeMap<>();
 
@@ -15,34 +15,39 @@ public class Part1 {
             symbols.put(i, getSymbolsFromLine(lines.get(i)));
         }
 
-        for (Entry<Integer, Map<Integer, String>> entry: numbers.entrySet()) {
-            Integer lineIndex = entry.getKey();
-            Map<Integer, String> lineNumbers = entry.getValue();
+        for (Entry<Integer, Map<Integer, String>> line : numbers.entrySet()) {
+            Integer lineIndex = line.getKey();
+            Map<Integer, String> lineNumbers = line.getValue();
 
-            for (Entry<Integer, String> number: lineNumbers.entrySet()) {
+            for (Entry<Integer, String> number : lineNumbers.entrySet()) {
                 int value = number.getKey();
                 int start = Integer.parseInt(number.getValue().split(",")[0]);
                 int end = Integer.parseInt(number.getValue().split(",")[1]);
+                boolean isAdjacent = false;
 
-                if (lineIndex > 0 && symbols.get(lineIndex - 1) != null) {
+                if (lineIndex > 0) {
                     // Check previous line symbols
                     for (Integer symPos : symbols.get(lineIndex - 1)) {
                         if (symPos >= start - 1 && symPos <= end + 1) {
                             parts.add(value);
+                            isAdjacent = true;
                             break;
                         }
                     }
                 }
 
                 //Check inline symbols
-                for (Integer symPos : symbols.get(lineIndex)) {
-                    if (symPos == start - 1 || symPos == end + 1) {
-                        parts.add(value);
-                        break;
+                if (!isAdjacent) {
+                    for (Integer symPos : symbols.get(lineIndex)) {
+                        if (symPos == start - 1 || symPos == end + 1) {
+                            parts.add(value);
+                            isAdjacent = true;
+                            break;
+                        }
                     }
                 }
 
-                if (lineIndex < numbers.size() && symbols.get(lineIndex + 1) != null) {
+                if (!isAdjacent && lineIndex < numbers.size() - 1) {
                     //Check next line symbols
                     for (Integer symPos : symbols.get(lineIndex + 1)) {
                         if (symPos >= start - 1 && symPos <= end + 1) {
@@ -94,7 +99,8 @@ public class Part1 {
     public boolean test(List<String> lines) {
         return processLines(lines).equals(4361);
     }
+
     public boolean test2(List<String> lines) {
-        return processLines(lines).equals(48536);
+        return processLines(lines).equals(53780);
     }
 }

@@ -16,9 +16,8 @@ public class Day3 {
         List<String> productionLines = processFile(INPUT_FILE_NAME);
 
         Part1 part1 = new Part1();
-        if (part1.test2(test2Lines)) {
-            System.out.println("Part 1 Test 2 result: " + part1.processLines(test2Lines));
-            //System.out.println("Part 1 result: " + part1.processLines(productionLines));
+        if (part1.test(testLines) && part1.test2(test2Lines)) {
+            System.out.println("Part 1 result: " + part1.processLines(productionLines));
         } else {
             System.out.println("Error on Part1");
         }
