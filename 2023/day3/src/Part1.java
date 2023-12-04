@@ -1,10 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,64 +7,60 @@ public class Part1 {
 
     public Integer processLines(List<String> lines) {
         Set<Integer> parts = new HashSet<>();
-        List<Map<Integer, String>> numbers = new ArrayList<>();
-        List<List<Integer>> symbols = new ArrayList<>();
+        Map<Integer, Map<Integer, String>> numbers = new TreeMap<>();
+        Map<Integer, List<Integer>> symbols = new TreeMap<>();
 
         for (int i = 0; i < lines.size(); i++) {
-            Map<Integer, String> nums = getNumbersFromLine(lines.get(i));
-            List<Integer> syms = getSymbolsFromLine(lines.get(i));
+            numbers.put(i, getNumbersFromLine(lines.get(i)));
+            symbols.put(i, getSymbolsFromLine(lines.get(i)));
+        }
 
-            for (Entry<Integer, String> entry: nums.entrySet()) {
-                String[] range = entry.getValue().split(",");
-                int start = Integer.parseInt(range[0]);
-                int end = Integer.parseInt(range[1]);
+        for (Entry<Integer, Map<Integer, String>> entry: numbers.entrySet()) {
+            Integer lineIndex = entry.getKey();
+            Map<Integer, String> lineNumbers = entry.getValue();
 
-                for (Integer symPos: syms) {
+            for (Entry<Integer, String> number: lineNumbers.entrySet()) {
+                int value = number.getKey();
+                int start = Integer.parseInt(number.getValue().split(",")[0]);
+                int end = Integer.parseInt(number.getValue().split(",")[1]);
+
+                if (lineIndex > 0 && symbols.get(lineIndex - 1) != null) {
+                    // Check previous line symbols
+                    for (Integer symPos : symbols.get(lineIndex - 1)) {
+                        if (symPos >= start - 1 && symPos <= end + 1) {
+                            parts.add(value);
+                            break;
+                        }
+                    }
+                }
+
+                //Check inline symbols
+                for (Integer symPos : symbols.get(lineIndex)) {
                     if (symPos == start - 1 || symPos == end + 1) {
-                        parts.add(entry.getKey());
+                        parts.add(value);
                         break;
                     }
                 }
-            }
 
-            if (i > 0) {
-                for (Entry<Integer, String> entry: nums.entrySet()) {
-                    String[] range = entry.getValue().split(",");
-                    int start = Integer.parseInt(range[0]);
-                    int end = Integer.parseInt(range[1]);
-
-                    for (Integer symPos: symbols.get(i - 1)) {
+                if (lineIndex < numbers.size() && symbols.get(lineIndex + 1) != null) {
+                    //Check next line symbols
+                    for (Integer symPos : symbols.get(lineIndex + 1)) {
                         if (symPos >= start - 1 && symPos <= end + 1) {
-                            parts.add(entry.getKey());
-                            break;
-                        }
-                    }
-                }
-
-                for (Integer symPos: syms) {
-                    for (Entry<Integer, String> entry: numbers.get(i - 1).entrySet()) {
-                        String[] range = entry.getValue().split(",");
-                        int start = Integer.parseInt(range[0]);
-                        int end = Integer.parseInt(range[1]);
-
-                        if (symPos >= start - 1 && symPos <= end + 1) {
-                            parts.add(entry.getKey());
+                            parts.add(value);
                             break;
                         }
                     }
                 }
             }
-
-            numbers.add(nums);
-            symbols.add(syms);
         }
 
-        System.out.println("symbols = " + symbols);
-        System.out.println("numbers = " + numbers);
-
-        return parts.stream()
+//        System.out.println("symbols = " + symbols);
+//        System.out.println("numbers = " + numbers);
+        int total = parts.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
+        System.out.println("total = " + total);
+        return total;
     }
 
     private List<Integer> getSymbolsFromLine(String line) {
@@ -78,6 +69,7 @@ public class Part1 {
         Matcher matcher = pattern.matcher(line);
 
         while (matcher.find()) {
+//            System.out.println("matcher = " + matcher.group());
             result.add(matcher.start());
         }
 
@@ -101,5 +93,8 @@ public class Part1 {
 
     public boolean test(List<String> lines) {
         return processLines(lines).equals(4361);
+    }
+    public boolean test2(List<String> lines) {
+        return processLines(lines).equals(48536);
     }
 }
