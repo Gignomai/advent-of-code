@@ -10,8 +10,7 @@ import java.util.regex.Pattern;
 public class Part1 {
 
     public Integer processLines(List<String> lines) {
-        List<Integer> parts = new ArrayList<>();
-        Map<Integer, Map<Integer, String>> numbers = new TreeMap<>();
+        Map<Integer, Map<Integer, Integer>> numbers = new TreeMap<>();
         Map<Integer, List<Integer>> symbols = new TreeMap<>();
 
         for (int i = 0; i < lines.size(); i++) {
@@ -26,10 +25,10 @@ public class Part1 {
 
             for (Integer position : lineSymbols) {
 
-                for (Entry<Integer, String> number : numbers.get(lineIndex - 1).entrySet()) {
-                    int value = number.getKey();
-                    int start = Integer.parseInt(number.getValue().split(",")[0]);
-                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+                for (Entry<Integer, Integer> number : numbers.get(lineIndex - 1).entrySet()) {
+                    int value = number.getValue();
+                    int start = number.getKey();
+                    int end = (start + String.valueOf(value).length()) - 1;
 
                     if (position >= start - 1 && position <= end + 1) {
                         total += value;
@@ -37,20 +36,20 @@ public class Part1 {
                 }
 
                 //Check inline symbols
-                for (Entry<Integer, String> number : numbers.get(lineIndex).entrySet()) {
-                    int value = number.getKey();
-                    int start = Integer.parseInt(number.getValue().split(",")[0]);
-                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+                for (Entry<Integer, Integer> number : numbers.get(lineIndex).entrySet()) {
+                    int value = number.getValue();
+                    int start = number.getKey();
+                    int end = (start + String.valueOf(value).length()) - 1;
                     if (position == start - 1 || position == end + 1) {
                         total += value;
                     }
                 }
 
                 //Check next line symbols
-                for (Entry<Integer, String> number : numbers.get(lineIndex + 1).entrySet()) {
-                    int value = number.getKey();
-                    int start = Integer.parseInt(number.getValue().split(",")[0]);
-                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+                for (Entry<Integer, Integer> number : numbers.get(lineIndex + 1).entrySet()) {
+                    int value = number.getValue();
+                    int start = number.getKey();
+                    int end = (start + String.valueOf(value).length()) - 1;
                     if (position >= start - 1 && position <= end + 1) {
                         total += value;
                     }
@@ -69,26 +68,22 @@ public class Part1 {
         Matcher matcher = pattern.matcher(line);
 
         while (matcher.find()) {
-//            System.out.println("matcher = " + matcher.group());
             result.add(matcher.start());
         }
 
         return result;
     }
 
-    private Map<Integer, String> getNumbersFromLine(String line) {
-        System.out.println("line = " + line);
-        HashMap<Integer, String> result = new HashMap<>();
+    private Map<Integer, Integer> getNumbersFromLine(String line) {
+        HashMap<Integer, Integer> result = new HashMap<>();
         Pattern pattern = Pattern.compile("(\\d+)");
         Matcher matcher = pattern.matcher(line);
 
         while (matcher.find()) {
             String group = matcher.group(1);
-            int number = Integer.parseInt(group);
-            String range = matcher.start() + "," + (matcher.end() - 1);
-            result.put(number, range);
+            result.put(matcher.start(), Integer.parseInt(group));
         }
-        System.out.println("result = " + result);
+
         return result;
     }
 
