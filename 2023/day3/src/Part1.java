@@ -24,7 +24,7 @@ public class Part1 {
             List<Integer> lineSymbols = line.getValue();
 
             for (Integer position : lineSymbols) {
-
+                // Check previous line numbers
                 for (Entry<Integer, Integer> number : numbers.get(lineIndex - 1).entrySet()) {
                     int value = number.getValue();
                     int start = number.getKey();
@@ -35,7 +35,7 @@ public class Part1 {
                     }
                 }
 
-                //Check inline symbols
+                // Check inline numbers
                 for (Entry<Integer, Integer> number : numbers.get(lineIndex).entrySet()) {
                     int value = number.getValue();
                     int start = number.getKey();
@@ -45,7 +45,7 @@ public class Part1 {
                     }
                 }
 
-                //Check next line symbols
+                // Check next line numbers
                 for (Entry<Integer, Integer> number : numbers.get(lineIndex + 1).entrySet()) {
                     int value = number.getValue();
                     int start = number.getKey();
