@@ -1,5 +1,9 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,55 +19,46 @@ public class Part1 {
             symbols.put(i, getSymbolsFromLine(lines.get(i)));
         }
 
-        for (Entry<Integer, Map<Integer, String>> line : numbers.entrySet()) {
+        int total = 0;
+        for (Entry<Integer, List<Integer>> line : symbols.entrySet()) {
             Integer lineIndex = line.getKey();
-            Map<Integer, String> lineNumbers = line.getValue();
+            List<Integer> lineSymbols = line.getValue();
 
-            for (Entry<Integer, String> number : lineNumbers.entrySet()) {
-                int value = number.getKey();
-                int start = Integer.parseInt(number.getValue().split(",")[0]);
-                int end = Integer.parseInt(number.getValue().split(",")[1]);
-                boolean isAdjacent = false;
+            for (Integer position : lineSymbols) {
 
-                if (lineIndex > 0) {
-                    // Check previous line symbols
-                    for (Integer symPos : symbols.get(lineIndex - 1)) {
-                        if (symPos >= start - 1 && symPos <= end + 1) {
-                            parts.add(value);
-                            isAdjacent = true;
-                            break;
-                        }
+                for (Entry<Integer, String> number : numbers.get(lineIndex - 1).entrySet()) {
+                    int value = number.getKey();
+                    int start = Integer.parseInt(number.getValue().split(",")[0]);
+                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+
+                    if (position >= start - 1 && position <= end + 1) {
+                        total += value;
                     }
                 }
 
                 //Check inline symbols
-                if (!isAdjacent) {
-                    for (Integer symPos : symbols.get(lineIndex)) {
-                        if (symPos == start - 1 || symPos == end + 1) {
-                            parts.add(value);
-                            isAdjacent = true;
-                            break;
-                        }
+                for (Entry<Integer, String> number : numbers.get(lineIndex).entrySet()) {
+                    int value = number.getKey();
+                    int start = Integer.parseInt(number.getValue().split(",")[0]);
+                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+                    if (position == start - 1 || position == end + 1) {
+                        total += value;
                     }
                 }
 
-                if (!isAdjacent && lineIndex < numbers.size() - 1) {
-                    //Check next line symbols
-                    for (Integer symPos : symbols.get(lineIndex + 1)) {
-                        if (symPos >= start - 1 && symPos <= end + 1) {
-                            parts.add(value);
-                            break;
-                        }
+                //Check next line symbols
+                for (Entry<Integer, String> number : numbers.get(lineIndex + 1).entrySet()) {
+                    int value = number.getKey();
+                    int start = Integer.parseInt(number.getValue().split(",")[0]);
+                    int end = Integer.parseInt(number.getValue().split(",")[1]);
+                    if (position >= start - 1 && position <= end + 1) {
+                        total += value;
                     }
                 }
+
             }
         }
 
-//        System.out.println("symbols = " + symbols);
-//        System.out.println("numbers = " + numbers);
-        int total = parts.stream()
-                .mapToInt(Integer::intValue)
-                .sum();
         System.out.println("total = " + total);
         return total;
     }
@@ -82,6 +77,7 @@ public class Part1 {
     }
 
     private Map<Integer, String> getNumbersFromLine(String line) {
+        System.out.println("line = " + line);
         HashMap<Integer, String> result = new HashMap<>();
         Pattern pattern = Pattern.compile("(\\d+)");
         Matcher matcher = pattern.matcher(line);
@@ -92,7 +88,7 @@ public class Part1 {
             String range = matcher.start() + "," + (matcher.end() - 1);
             result.put(number, range);
         }
-
+        System.out.println("result = " + result);
         return result;
     }
 
@@ -101,6 +97,6 @@ public class Part1 {
     }
 
     public boolean test2(List<String> lines) {
-        return processLines(lines).equals(53780);
+        return processLines(lines).equals(49741);
     }
 }
