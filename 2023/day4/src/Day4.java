@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 public class Day4 {
     private static final String INPUT_TEST_FILE_NAME = "src/input_test.txt";
     private static final String INPUT_FILE_NAME = "src/input.txt";
-    public static final String LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static void main(String[] args) {
         List<String> testLines = processFile(INPUT_TEST_FILE_NAME);

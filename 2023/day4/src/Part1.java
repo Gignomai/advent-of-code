@@ -1,23 +1,48 @@
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Part1 {
-    public Long processLines(List<String> lines) {
-        return lines.stream()
-                .filter(this::checkOverlappedRanges)
-                .count();
+    public Integer processLines(List<String> lines) {
+        int total = 0;
+
+        for (String line: lines) {
+
+            List<Integer> winners = winnersFormCard(line);
+            List<Integer> numbers = numbersFromCard(line);
+            int count = 0;
+            for (Integer winner: winners) {
+                if (numbers.contains(winner)) {
+                    if (count == 0) {
+                        count++;
+                    } else {
+                        count *= 2;
+                    }
+                }
+            }
+
+            total += count;
+        }
+        System.out.println("total = " + total);
+        return total;
     }
 
-    private boolean checkOverlappedRanges(String s) {
-        String[] parts = s.split(",");
-        int elf1Ini = Integer.parseInt(parts[0].split("-")[0]);
-        int elf1End = Integer.parseInt(parts[0].split("-")[1]);
-        int elf2Ini = Integer.parseInt(parts[1].split("-")[0]);
-        int elf2End = Integer.parseInt(parts[1].split("-")[1]);
+    private List<Integer> winnersFormCard(String line) {
+        String firstPart = line.split("\\|")[0];
+        return Stream.of(firstPart.split(":")[1].trim().split(" "))
+                .filter(s -> !s.isEmpty())
+                .map(Integer::parseInt)
+                .toList();
+    }
 
-        return (elf1Ini >= elf2Ini && elf1End <= elf2End) || (elf2Ini >= elf1Ini && elf2End <= elf1End);
+    private List<Integer> numbersFromCard(String line) {
+        String part = line.split("\\|")[1];
+        return Stream.of(part.split(" "))
+                .filter(s -> !s.isEmpty())
+                .map(Integer::parseInt)
+                .toList();
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(2L);
+        return processLines(lines).equals(13);
     }
 }
