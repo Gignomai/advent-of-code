@@ -37,3 +37,9 @@ public class Day4 {
         }
     }
 }
+
+
+/*
+Part 1 result: 22488
+Part 2 result: 7013204
+ */

@@ -1,45 +1,43 @@
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Part2 {
     public Integer processLines(List<String> lines) {
-        int total = 0;
+        List<Card> cards = lines.stream()
+                .map(Card::new)
+                .toList();
 
-        for (String line: lines) {
+        HashMap<Integer, Integer> cardCount = new HashMap<>();
+        for (int i = 1; i <= lines.size(); i++) {
+            cardCount.put(i, 1);
+        }
 
-            List<Integer> winners = winnersFormCard(line);
-            List<Integer> numbers = numbersFromCard(line);
+        int lineNumber = 1;
+        for (Card card: cards) {
             int count = 0;
-            for (Integer winner: winners) {
-                if (numbers.contains(winner)) {
-                    if (count == 0) {
-                        count++;
-                    } else {
-                        count *= 2;
-                    }
+
+            for (Integer winner : card.getWinners()) {
+                if (card.getNumbers().contains(winner)) {
+                    count++;
                 }
             }
 
-            total += count;
+            for (int i = 1; i <= count; i++) {
+                Integer currentCardCopies = cardCount.get(lineNumber);
+                Integer copies = cardCount.get(lineNumber + i);
+
+                cardCount.put(lineNumber + i, copies + currentCardCopies);
+            }
+
+            lineNumber++;
         }
-        System.out.println("total = " + total);
+
+        Integer total = 0;
+        for (var entry: cardCount.entrySet()) {
+            total += entry.getValue();
+        }
+
         return total;
-    }
-
-    private List<Integer> winnersFormCard(String line) {
-        String firstPart = line.split("\\|")[0];
-        return Stream.of(firstPart.split(":")[1].trim().split(" "))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::parseInt)
-                .toList();
-    }
-
-    private List<Integer> numbersFromCard(String line) {
-        String part = line.split("\\|")[1];
-        return Stream.of(part.split(" "))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::parseInt)
-                .toList();
     }
 
     public boolean test(List<String> lines) {

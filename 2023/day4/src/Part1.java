@@ -1,17 +1,19 @@
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Part1 {
     public Integer processLines(List<String> lines) {
         int total = 0;
 
-        for (String line: lines) {
+        List<Card> cards = lines.stream()
+                .map(Card::new)
+                .toList();
 
-            List<Integer> winners = winnersFormCard(line);
-            List<Integer> numbers = numbersFromCard(line);
+        for (Card card: cards) {
             int count = 0;
-            for (Integer winner: winners) {
-                if (numbers.contains(winner)) {
+            for (Integer winner: card.getWinners()) {
+                if (card.getNumbers().contains(winner)) {
                     if (count == 0) {
                         count++;
                     } else {
@@ -22,24 +24,8 @@ public class Part1 {
 
             total += count;
         }
-        System.out.println("total = " + total);
+
         return total;
-    }
-
-    private List<Integer> winnersFormCard(String line) {
-        String firstPart = line.split("\\|")[0];
-        return Stream.of(firstPart.split(":")[1].trim().split(" "))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::parseInt)
-                .toList();
-    }
-
-    private List<Integer> numbersFromCard(String line) {
-        String part = line.split("\\|")[1];
-        return Stream.of(part.split(" "))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::parseInt)
-                .toList();
     }
 
     public boolean test(List<String> lines) {
