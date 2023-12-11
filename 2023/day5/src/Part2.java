@@ -1,11 +1,11 @@
 import java.util.List;
 
 public class Part2 {
-    public String processLines(List<String> lines) {
-        return new SupplyCargo(lines).crateMover9001Operate();
+    public Integer processLines(List<String> lines) {
+        return 0;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals("MCD");
+        return processLines(lines).equals(0);
     }
 }
