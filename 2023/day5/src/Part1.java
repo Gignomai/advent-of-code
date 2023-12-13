@@ -1,161 +1,166 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeMap;
 
 public class Part1 {
-    public Integer processLines(List<String> lines) {
-        List<Integer> locations = new ArrayList<>();
+    public Long processLines(List<String> lines) {
+        List<Long> locations = new ArrayList<>();
         // Get list of seeds
-        List<Integer> seeds = Arrays.stream(lines.get(0).split(":")[1].trim().split(" "))
-                .map(Integer::valueOf)
+        List<Long> seeds = Arrays.stream(
+                lines.get(0)
+                        .split(":")[1]
+                        .trim()
+                        .split(" "))
+                .map(Long::valueOf)
                 .toList();
         // Create Maps
         int lineNumber = 3;
         // seed-to-soil map:
-        TreeMap<Integer, Integer> seedToSoilMap = new TreeMap<>();
+        List<List<Long>> seedToSoilMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                seedToSoilMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            seedToSoilMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // soil-to-fertilizer map:
-        TreeMap<Integer, Integer> soilToFertilizerMap = new TreeMap<>();
+        List<List<Long>> soilToFertilizerMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                soilToFertilizerMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            soilToFertilizerMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // fertilizer-to-water map:
-        TreeMap<Integer, Integer> fertilizerToWaterMap = new TreeMap<>();
+        List<List<Long>> fertilizerToWaterMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                fertilizerToWaterMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            fertilizerToWaterMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // water-to-light map:
-        TreeMap<Integer, Integer> waterToLightMap = new TreeMap<>();
+        List<List<Long>> waterToLightMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                waterToLightMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            waterToLightMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // light-to-temperature map:
-        TreeMap<Integer, Integer> lightToTemperatureMap = new TreeMap<>();
+        List<List<Long>> lightToTemperatureMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                lightToTemperatureMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            lightToTemperatureMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // temperature-to-humidity map:
-        TreeMap<Integer, Integer> temperatureToHumidityMap = new TreeMap<>();
+        List<List<Long>> temperatureToHumidityMap = new ArrayList<>();
         while (!lines.get(lineNumber).isEmpty()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                temperatureToHumidityMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            temperatureToHumidityMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
         lineNumber += 2;
         // humidity-to-location map:
-        TreeMap<Integer, Integer> humidityToLocationMap = new TreeMap<>();
+        List<List<Long>> humidityToLocationMap = new ArrayList<>();
         while (lineNumber < lines.size()) {
             String[] parts = lines.get(lineNumber).split(" ");
-            int destinationRangeStart = Integer.parseInt(parts[0]);
-            int sourceRangeStart = Integer.parseInt(parts[1]);
-            int rangeLength = Integer.parseInt(parts[2]);
-            for (int i = 0; i < rangeLength; i++) {
-                humidityToLocationMap.put(sourceRangeStart + i, destinationRangeStart + i);
-            }
+            long destinationRangeStart = Long.parseLong(parts[0]);
+            long sourceRangeStart = Long.parseLong(parts[1]);
+            long rangeLength = Long.parseLong(parts[2]);
+            humidityToLocationMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
             lineNumber++;
         }
 
-        System.out.println("seedToSoilMap = " + seedToSoilMap);
-        System.out.println("soilToFertilizerMap = " + soilToFertilizerMap);
-        System.out.println("fertilizerToWaterMap = " + fertilizerToWaterMap);
-        System.out.println("waterToLightMap = " + waterToLightMap);
-        System.out.println("lightToTemperatureMap = " + lightToTemperatureMap);
-        System.out.println("temperatureToHumidityMap = " + temperatureToHumidityMap);
-        System.out.println("humidityToLocationMap = " + humidityToLocationMap);
         // Map seeds to location
-        for (Integer seed : seeds) {
-            System.out.println("seed = " + seed);
-            int mappedValue = seedToSoilMap.getOrDefault(seed, seed);
-//            System.out.println("soil = " + mappedValue);
-            if (soilToFertilizerMap.containsKey(mappedValue)) {
-                mappedValue = soilToFertilizerMap.get(seed);
-//                System.out.println("fertilizer = " + mappedValue);
+        for (Long seed : seeds) {
+            long mappedValue = seed;
+
+            for(List<Long> values: seedToSoilMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            if (fertilizerToWaterMap.containsKey(mappedValue)) {
-                mappedValue = fertilizerToWaterMap.get(seed);
-//                System.out.println("Water = " + mappedValue);
+
+            for(List<Long> values: soilToFertilizerMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            if (waterToLightMap.containsKey(mappedValue)) {
-                mappedValue = waterToLightMap.get(mappedValue);
-//                System.out.println("Light = " + mappedValue);
+
+            for(List<Long> values: fertilizerToWaterMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            if (lightToTemperatureMap.containsKey(mappedValue)) {
-                mappedValue = lightToTemperatureMap.get(mappedValue);
-//                System.out.println("temperature = " + mappedValue);
+
+            for(List<Long> values: waterToLightMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            if (temperatureToHumidityMap.containsKey(mappedValue)) {
-                mappedValue = temperatureToHumidityMap.get(mappedValue);
+
+            for(List<Long> values: lightToTemperatureMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            if (humidityToLocationMap.containsKey(mappedValue)) {
-                mappedValue = humidityToLocationMap.get(mappedValue);
+
+            for(List<Long> values: temperatureToHumidityMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
             }
-            System.out.println("mappedValue = " + mappedValue);
+
+            for(List<Long> values: humidityToLocationMap) {
+                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                    mappedValue = values.get(0) + mappedValue - values.get(1);
+                    break;
+                }
+            }
+
             locations.add(mappedValue);
         }
         // Return closer (lower) location
-        int result = locations.stream()
-                .mapToInt(Integer::intValue)
+        return locations.stream()
+                .mapToLong(Long::valueOf)
                 .min()
-                .orElse(-1);
-        System.out.println("result = " + result);
-        return result;
+                .orElse(0L);
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(35);
+        return processLines(lines).equals(35L);
     }
 }
