@@ -14,140 +14,33 @@ public class Part1 {
                 .map(Long::valueOf)
                 .toList();
         // Create Maps
-        int lineNumber = 3;
-        // seed-to-soil map:
-        List<List<Long>> seedToSoilMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            seedToSoilMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
+        List<List<List<Long>>> mappings = new ArrayList<>();
+        List<List<Long>> mapping = new ArrayList<>();
+        for (int i = 3; i < lines.size(); i++) {
+            if (lines.get(i).isEmpty()) {
+                mappings.add(mapping);
+                mapping = new ArrayList<>();
+                i ++;
+            } else {
+                String[] parts = lines.get(i).split(" ");
+                long destinationRangeStart = Long.parseLong(parts[0]);
+                long sourceRangeStart = Long.parseLong(parts[1]);
+                long rangeLength = Long.parseLong(parts[2]);
+                mapping.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
+            }
         }
-
-        lineNumber += 2;
-        // soil-to-fertilizer map:
-        List<List<Long>> soilToFertilizerMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            soilToFertilizerMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
-
-        lineNumber += 2;
-        // fertilizer-to-water map:
-        List<List<Long>> fertilizerToWaterMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            fertilizerToWaterMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
-
-        lineNumber += 2;
-        // water-to-light map:
-        List<List<Long>> waterToLightMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            waterToLightMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
-
-        lineNumber += 2;
-        // light-to-temperature map:
-        List<List<Long>> lightToTemperatureMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            lightToTemperatureMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
-
-        lineNumber += 2;
-        // temperature-to-humidity map:
-        List<List<Long>> temperatureToHumidityMap = new ArrayList<>();
-        while (!lines.get(lineNumber).isEmpty()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            temperatureToHumidityMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
-
-        lineNumber += 2;
-        // humidity-to-location map:
-        List<List<Long>> humidityToLocationMap = new ArrayList<>();
-        while (lineNumber < lines.size()) {
-            String[] parts = lines.get(lineNumber).split(" ");
-            long destinationRangeStart = Long.parseLong(parts[0]);
-            long sourceRangeStart = Long.parseLong(parts[1]);
-            long rangeLength = Long.parseLong(parts[2]);
-            humidityToLocationMap.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
-            lineNumber++;
-        }
+        mappings.add(mapping);
 
         // Map seeds to location
         for (Long seed : seeds) {
             long mappedValue = seed;
 
-            for(List<Long> values: seedToSoilMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: soilToFertilizerMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: fertilizerToWaterMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: waterToLightMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: lightToTemperatureMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: temperatureToHumidityMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
-                }
-            }
-
-            for(List<Long> values: humidityToLocationMap) {
-                if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                    mappedValue = values.get(0) + mappedValue - values.get(1);
-                    break;
+            for (List<List<Long>> map: mappings) {
+                for(List<Long> values: map) {
+                    if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
+                        mappedValue = values.get(0) + mappedValue - values.get(1);
+                        break;
+                    }
                 }
             }
 
