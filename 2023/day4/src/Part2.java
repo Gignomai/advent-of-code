@@ -1,5 +1,5 @@
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.List;
 
 public class Part2 {
     public Integer processLines(List<String> lines) {

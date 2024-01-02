@@ -1,61 +1,51 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Part2 {
     public Long processLines(List<String> lines) {
-        List<Long> locations = new ArrayList<>();
         // Create Maps
-        List<List<List<Long>>> mappings = new ArrayList<>();
-        List<List<Long>> mapping = new ArrayList<>();
-        for (int i = 3; i < lines.size(); i++) {
-            if (lines.get(i).isEmpty()) {
-                mappings.add(mapping);
-                mapping = new ArrayList<>();
-                i ++;
+        long[][][] mappings = new long[7][60][3];
+        int mappingCount = 0;
+        int mappingRange = 0;
+        for (int line = 3; line < lines.size(); line++) {
+            if (lines.get(line).isEmpty()) {
+                mappingRange = 0;
+                mappingCount++;
+                line++;
             } else {
-                String[] parts = lines.get(i).split(" ");
-                long destinationRangeStart = Long.parseLong(parts[0]);
-                long sourceRangeStart = Long.parseLong(parts[1]);
-                long rangeLength = Long.parseLong(parts[2]);
-                mapping.add(List.of(destinationRangeStart, sourceRangeStart, rangeLength));
+                String[] parts = lines.get(line).split(" ");
+                mappings[mappingCount][mappingRange][0] = Long.parseLong(parts[0]);
+                mappings[mappingCount][mappingRange][1] = Long.parseLong(parts[1]);
+                mappings[mappingCount][mappingRange][2] = Long.parseLong(parts[2]);
+                mappingRange++;
             }
         }
-        mappings.add(mapping);
 
         // Map seeds to location
-        Map<Long,Long> memo = new HashMap<>();
+        long location = Long.MAX_VALUE;
         String[] seeds = lines.get(0).split(":")[1].trim().split(" ");
+
         for (int i = 0; i < seeds.length; i += 2) {
             long seedRangeStart = Long.parseLong(seeds[i]);
             long seedRangeLength = Long.parseLong(seeds[i + 1]);
-            for (long seed = seedRangeStart; seed < seedRangeStart + seedRangeLength; seed++) {
+//            System.out.println("seedRangeStart = " + seedRangeStart + " seedRangeLength = " + seedRangeLength);
+            for (long seed = seedRangeStart; seed < seedRangeStart + (seedRangeLength - 1); seed++) {
                 long mappedValue = seed;
-
-                for (List<List<Long>> map: mappings) {
-                    for(List<Long> values: map) {
-                        if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
-                            mappedValue = values.get(0) + mappedValue - values.get(1);
+                for (long[][] map : mappings) {
+                    for (long[] values : map) {
+                        if (mappedValue >= values[1] && mappedValue <= (values[1] + values[2])) {
+                            mappedValue = values[0] + mappedValue - values[1];
                             break;
                         }
                     }
                 }
-
                 // System.out.println("mappedValue = " + mappedValue);
-                locations.add(mappedValue);
-
+                if (mappedValue < location) {
+                    location = mappedValue;
+                }
             }
         }
 
-
-        // Return closer (lower) location
-        return locations.stream()
-                .mapToLong(Long::valueOf)
-                .min()
-                .orElse(0L);
-        // System.out.println("result = " + result);
-//        return 46L;
+        return location; // NO 6082853 Alto
     }
 
     public boolean test(List<String> lines) {

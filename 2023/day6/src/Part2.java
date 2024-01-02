@@ -1,39 +1,24 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Part2 {
     public Long processLines(List<String> lines) {
-        return lines.stream()
-                .map(this::searchFirstStartOfPacketMarker)
-                .findFirst()
-                .orElse(0L);
-    }
+        long time = Long.parseLong(lines.get(0).replace(" ", "").split(":")[1]);
+        long distance = Long.parseLong(lines.get(1).replace(" ", "").split(":")[1]);
+        long count = 0;
 
-    private long searchFirstStartOfPacketMarker(String s) {
-        long position = 0L;
-
-        for (int i = 0; i < s.length(); i++) {
-            if (hasDuplicatedLetters(s.substring(i, i + 14))) {
-                position = i + 14;
-                break;
+        for (int i = 1; i < time; i++) {
+            if (i * (time - i) > distance) {
+                count++;
             }
         }
 
-        return position;
-    }
-
-    private boolean hasDuplicatedLetters(String letters) {
-        char[] part = letters.toCharArray();
-        for (int i = 0; i < 14; i++) {
-            for (int j = i + 1; j < 14; j++) {
-                if (part[i] == part[j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return count;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(19L);
+        return processLines(lines).equals(71503L);
     }
 }

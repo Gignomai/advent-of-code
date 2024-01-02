@@ -1,6 +1,4 @@
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Part1 {
     public Integer processLines(List<String> lines) {

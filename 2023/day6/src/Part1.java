@@ -1,40 +1,48 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Part1 {
-    public Long processLines(List<String> lines) {
-        return lines.stream()
-                .mapToLong(this::searchFirstStartOfPacketMarker)
-                .findFirst()
-                .orElse(0L);
-    }
+    public Integer processLines(List<String> lines) {
+        List<Integer> times = getNumbersFromLine(lines.get(0));
+        List<Integer> distances = getNumbersFromLine(lines.get(1));
+        int total = 1;
 
-    private long searchFirstStartOfPacketMarker(String s) {
-        long position = 0L;
+        for (int i = 0; i < times.size(); i++) {
+            int count = 0;
+            int time = times.get(i);
+            int distance = distances.get(i);
 
-        for (int i = 0; i < s.length(); i++) {
-            if (isMarker(s.substring(i, i + 4))) {
-                position = i + 4;
-                break;
-            }
-        }
-
-        return position;
-    }
-
-    private boolean isMarker(String slice) {
-        char[] part = slice.toCharArray();
-        for (int i = 0; i < 4; i++) {
-            for (int j = i + 1; j < 4; j++) {
-                if (part[i] == part[j]) {
-                    return false;
+            for (int j = 1; j < time; j++) {
+                if (j * (time- j) > distance) {
+                    count ++;
                 }
             }
+
+            total *= count;
         }
-        return true;
+
+        return total;
+    }
+
+    private List<Integer> getNumbersFromLine(String line) {
+        List<Integer> result = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\d+)");
+        Matcher matcher = pattern.matcher(line);
+
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            result.add(Integer.parseInt(group));
+        }
+
+        return result;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(7L);
+        return processLines(lines).equals(288);
     }
 
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 public class Part1 {
     public Long processLines(List<String> lines) {
-        List<Long> locations = new ArrayList<>();
+        long location = Long.MAX_VALUE;
         // Get list of seeds
         List<Long> seeds = Arrays.stream(
-                lines.get(0)
-                        .split(":")[1]
-                        .trim()
-                        .split(" "))
+                        lines.get(0)
+                                .split(":")[1]
+                                .trim()
+                                .split(" "))
                 .map(Long::valueOf)
                 .toList();
         // Create Maps
@@ -20,7 +20,7 @@ public class Part1 {
             if (lines.get(i).isEmpty()) {
                 mappings.add(mapping);
                 mapping = new ArrayList<>();
-                i ++;
+                i++;
             } else {
                 String[] parts = lines.get(i).split(" ");
                 long destinationRangeStart = Long.parseLong(parts[0]);
@@ -35,22 +35,20 @@ public class Part1 {
         for (Long seed : seeds) {
             long mappedValue = seed;
 
-            for (List<List<Long>> map: mappings) {
-                for(List<Long> values: map) {
+            for (List<List<Long>> map : mappings) {
+                for (List<Long> values : map) {
                     if (mappedValue >= values.get(1) && mappedValue <= (values.get(1) + values.get(2))) {
                         mappedValue = values.get(0) + mappedValue - values.get(1);
                         break;
                     }
                 }
             }
-
-            locations.add(mappedValue);
+            if (mappedValue < location) {
+                location = mappedValue;
+            }
         }
         // Return closer (lower) location
-        return locations.stream()
-                .mapToLong(Long::valueOf)
-                .min()
-                .orElse(0L);
+        return location;
     }
 
     public boolean test(List<String> lines) {

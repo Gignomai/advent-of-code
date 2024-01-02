@@ -15,6 +15,7 @@ public class Day6 {
 
         Part1 part1 = new Part1();
         if (part1.test(testLines)) {
+            // Part 1 result: 861300
             System.out.println("Part 1 result: " + part1.processLines(productionLines));
         } else {
             System.out.println("Error on Part1");
