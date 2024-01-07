@@ -1,35 +1,26 @@
+import java.util.Collections;
 import java.util.List;
 
 public class Part2 {
+    public Long processLines(List<String> lines){
+        List<HandJoker> hands = new java.util.ArrayList<>(lines.stream()
+                .map(line -> line.split(" "))
+                .map(parts -> new HandJoker(parts[0], parts[1]))
+                .toList());
 
-    public static final int TOTAL_DEVICE_DISK_SPACE = 70000000;
-    public static final int SYSTEM_UPDATE_DISK_USAGE = 30000000;
+        Collections.sort(hands);
+        System.out.println("hands = " + hands);
 
-    public Integer processLines(List<String> lines) {
-        Node root = Node.getNodeTreeFromCommandList(lines);
-        int free = TOTAL_DEVICE_DISK_SPACE - root.getSize();
-        Integer needed = SYSTEM_UPDATE_DISK_USAGE - free;
+        long total = 0L;
 
-        return getMinSizeViableDir(root, needed);
-    }
-
-    private Integer getMinSizeViableDir(Node node, Integer needed) {
-        if (node.getChildren().isEmpty()) {
-            return node.getSize();
+        for (int i = 0; i < hands.size(); i++) {
+            total += (hands.get(i).getBid() * (i + 1L));
         }
 
-        Integer result = node.getSize();
-        for (Node n: node.getChildren()) {
-            Integer childSize = getMinSizeViableDir(n, needed);
-            if (childSize > needed && childSize < result) {
-                result = childSize;
-            }
-        }
-
-        return result;
+        return total;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(24933642);
+        return processLines(lines).equals(5905L);
     }
 }

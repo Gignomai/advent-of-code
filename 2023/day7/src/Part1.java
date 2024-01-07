@@ -1,33 +1,24 @@
+import java.util.Collections;
 import java.util.List;
 
 public class Part1 {
 
-    public static final int DIR_MIN_SIZE = 100000;
+    public Long processLines(List<String> lines){
+        List<Hand> hands = new java.util.ArrayList<>(lines.stream()
+                .map(line -> line.split(" "))
+                .map(parts -> new Hand(parts[0], parts[1]))
+                .toList());
+        Collections.sort(hands);
 
-    public Integer processLines(List<String> lines){
-        return calculateTotal(Node.getNodeTreeFromCommandList(lines));
-    }
-
-    private int calculateTotal(Node node) {
-        if (node.getChildren().isEmpty()) {
-            if (node.getSize() <= DIR_MIN_SIZE) {
-                return node.getSize();
-            } else {
-                return 0;
-            }
+        long total = 0L;
+        for (int i = 0; i < hands.size(); i++) {
+            total += (hands.get(i).getBid() * (i + 1L));
         }
 
-        Integer result = 0;
-        if (node.getSize() <= DIR_MIN_SIZE) {
-            result = node.getSize();
-        }
-
-        return result + node.getChildren().stream()
-                .mapToInt(this::calculateTotal)
-                .sum();
+        return total;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(95437);
+        return processLines(lines).equals(6440L);
     }
 }
