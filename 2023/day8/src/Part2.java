@@ -1,67 +1,60 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Part2 {
     public Integer processLines(List<String> lines) {
-        HeightMap map = new HeightMap(lines);
-        return getMaxScenicScore(map.grid);
-    }
+        String[] instructions = lines.get(0).split("");
+        Map<String, List<String>> nodes = new HashMap<>();
+        List<String> visited = new ArrayList<>();
 
-    private Integer getMaxScenicScore(int[][] grid) {
-        int numberOfLines = grid.length;
-        int lineLength = grid[0].length;
-        int maxScenicScore = 0;
-
-        for (int i = 1; i < numberOfLines - 1; i++) {
-            for (int j = 1; j < lineLength - 1; j++) {
-
-                //Search North
-                int northScore = 0;
-                for (int row = i - 1; row >= 0; row--) {
-                    northScore++;
-                    if (grid[row][j] >= grid[i][j]) {
-                        break;
-                    }
-                }
-
-                //Search East
-                int eastScore = 0;
-                for (int col = j + 1; col < lineLength; col++) {
-                    eastScore++;
-                    if (grid[i][col] >= grid[i][j]) {
-                        break;
-                    }
-                }
-
-                //Search South
-                int southScore = 0;
-                for (int row = i + 1; row < numberOfLines; row++) {
-                    southScore++;
-                    if (grid[row][j] >= grid[i][j]) {
-                        break;
-                    }
-                }
-
-                //Search West
-                int westScore = 0;
-                for (int col = j - 1; col >= 0; col--) {
-                    westScore++;
-                    if (grid[i][col] >= grid[i][j]) {
-                        break;
-                    }
-                }
-
-                int auxScore = northScore * westScore * southScore * eastScore;
-                if (auxScore > maxScenicScore) {
-                    maxScenicScore = auxScore;
-                }
-
+        for (int i = 2; i < lines.size(); i++) {
+            String clear = lines.get(i).replace(" ", "")
+                    .replace("(", "")
+                    .replace(")", "");
+            String name = clear.split("=")[0];
+            String children = clear.split("=")[1];
+            nodes.put(name, List.of(children.split(",")));
+            if (name.endsWith("A")) {
+                visited.add(name);
             }
         }
 
-        return maxScenicScore;
+        boolean exit = false;
+        int count = 0;
+        int i = 0;
+        while (!exit) {
+            List<String> currentNodes = new ArrayList<>();
+            int instruction = instructions[i].equals("L") ? 0 : 1;
+
+            for (String node: visited) {
+                currentNodes.add(nodes.get(node).get(instruction));
+            }
+
+            boolean isEndingStep = true;
+            for (String destination: currentNodes) {
+                if (!destination.endsWith("Z")){
+                    isEndingStep = false;
+                    break;
+                }
+            }
+
+            visited = currentNodes;
+            exit = isEndingStep;
+            count++;
+            if (i == instructions.length - 1) {
+                System.out.println("count = " + count);
+                i = 0;
+            } else {
+                i++;
+            }
+        }
+
+        return count;
     }
 
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(8);
+        return processLines(lines).equals(6);
     }
 }
