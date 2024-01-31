@@ -26,7 +26,8 @@ public class Day8 {
         }
 
         Part2 part2 = new Part2();
-        if(part2.test(testLines3)) {
+        if (part2.test(testLines3)) {
+            // Part 2 result: 19185263738117
             System.out.println("Part 2 result: " + part2.processLines(productionLines));
         } else {
             System.out.println("Error on Part2");
