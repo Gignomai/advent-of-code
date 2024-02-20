@@ -23,7 +23,7 @@ public class Day5 {
 
         Part2 part2 = new Part2();
         if(part2.test(testLines)) {
-//            System.out.println(part2.processLines(testLines));
+            //Part 2 result: 6082852
             System.out.println("Part 2 result: " + part2.processLines(productionLines));
         } else {
             System.out.println("Error on Part2");

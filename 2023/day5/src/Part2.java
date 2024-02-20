@@ -1,51 +1,88 @@
+import java.util.ArrayList;
 import java.util.List;
+
+
+record Range(Long start, Long end) {
+    public Range(String start, String length) {
+        this(Long.parseLong(start), Long.parseLong(start) + Long.parseLong(length) - 1L);
+    }
+}
+
+record Mapping(Range source, Range destination) {
+}
+
+record Category(List<Mapping> mappings) {
+}
 
 public class Part2 {
     public Long processLines(List<String> lines) {
-        // Create Maps
-        long[][][] mappings = new long[7][60][3];
-        int mappingCount = 0;
-        int mappingRange = 0;
+        List<Range> seeds = new ArrayList<>();
+        String[] parts = lines.get(0)
+                .split(":")[1]
+                .trim()
+                .split(" ");
+        for (int i = 0; i < parts.length; i += 2) {
+            long start = Long.parseLong(parts[i]);
+            long length = Long.parseLong(parts[i + 1]);
+
+            seeds.add(new Range(start, start + length - 1));
+        }
+
+        List<Category> categories = new ArrayList<>();
+        List<Mapping> mappings = new ArrayList<>();
         for (int line = 3; line < lines.size(); line++) {
             if (lines.get(line).isEmpty()) {
-                mappingRange = 0;
-                mappingCount++;
+                categories.add(new Category(mappings));
+                mappings = new ArrayList<>();
                 line++;
             } else {
-                String[] parts = lines.get(line).split(" ");
-                mappings[mappingCount][mappingRange][0] = Long.parseLong(parts[0]);
-                mappings[mappingCount][mappingRange][1] = Long.parseLong(parts[1]);
-                mappings[mappingCount][mappingRange][2] = Long.parseLong(parts[2]);
-                mappingRange++;
+                parts = lines.get(line).split(" ");
+                Range source = new Range(parts[1], parts[2]);
+                Range destination = new Range(parts[0], parts[2]);
+                mappings.add(new Mapping(source, destination));
             }
         }
+        categories.add(new Category(mappings));
 
         // Map seeds to location
-        long location = Long.MAX_VALUE;
-        String[] seeds = lines.get(0).split(":")[1].trim().split(" ");
+        List<Range> mappedRanges = seeds;
+        for (Category category : categories) {
+            List<Range> aux = new ArrayList<>();
+            while (!mappedRanges.isEmpty()) {
+                Range mappedRange = mappedRanges.get(0);
+                boolean hasMapping = false;
+                for (Mapping mapping : category.mappings()) {
+                    Range overlap = new Range(Math.max(mappedRange.start(), mapping.source().start()),
+                            Math.min(mappedRange.end(), mapping.source().end()));
 
-        for (int i = 0; i < seeds.length; i += 2) {
-            long seedRangeStart = Long.parseLong(seeds[i]);
-            long seedRangeLength = Long.parseLong(seeds[i + 1]);
-//            System.out.println("seedRangeStart = " + seedRangeStart + " seedRangeLength = " + seedRangeLength);
-            for (long seed = seedRangeStart; seed < seedRangeStart + (seedRangeLength - 1); seed++) {
-                long mappedValue = seed;
-                for (long[][] map : mappings) {
-                    for (long[] values : map) {
-                        if (mappedValue >= values[1] && mappedValue <= (values[1] + values[2])) {
-                            mappedValue = values[0] + mappedValue - values[1];
-                            break;
+                    if (overlap.start() < overlap.end()) {
+                        aux.add(new Range(overlap.start() - mapping.source().start() + mapping.destination().start(),
+                                overlap.end() - mapping.source().start() + mapping.destination().start()));
+
+                        if (overlap.start() > mappedRange.start()) {
+                            seeds.add(new Range(mappedRange.start(), overlap.start() - 1));
                         }
+                        if (mappedRange.end() > overlap.end()) {
+                            seeds.add(new Range(overlap.end() + 1, mappedRange.end()));
+                        }
+
+                        hasMapping = true;
+                        break;
                     }
                 }
-                // System.out.println("mappedValue = " + mappedValue);
-                if (mappedValue < location) {
-                    location = mappedValue;
+                if (!hasMapping) {
+                    aux.add(mappedRange);
                 }
+                mappedRanges.remove(0);
             }
+            mappedRanges = aux;
         }
 
-        return location; // NO 6082853 Alto
+        return mappedRanges.stream()
+                .map(Range::start)
+                .mapToLong(Long::longValue)
+                .min()
+                .orElse(0L);
     }
 
     public boolean test(List<String> lines) {
