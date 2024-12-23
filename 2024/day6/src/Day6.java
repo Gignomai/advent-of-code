@@ -15,7 +15,7 @@ public class Day6 {
 
         Part1 part1 = new Part1();
         if (part1.test(testLines)) {
-            // Part 1 result: 861300
+            // Part 1 result: 4752
             System.out.println("Part 1 result: " + part1.processLines(productionLines));
         } else {
             System.out.println("Error on Part1");
@@ -23,7 +23,7 @@ public class Day6 {
 
         Part2 part2 = new Part2();
         if(part2.test(testLines)) {
-            // Part 2 result: 861300
+            // Part 2 result: 1719
             System.out.println("Part 2 result: " + part2.processLines(productionLines));
         } else {
             System.out.println("Error on Part2");
