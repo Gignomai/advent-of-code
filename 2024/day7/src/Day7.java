@@ -12,11 +12,10 @@ public class Day7 {
     public static void main(String[] args) {
         List<String> testLines = processFile(INPUT_TEST_FILE_NAME);
         List<String> productionLines = processFile(INPUT_FILE_NAME);
-        int i = 0;
 
         Part1 part1 = new Part1();
         if (part1.test(testLines)) {
-            // Part 1 result: 251121738
+            // Part 1 result: 1708857123053
             System.out.println("Part 1 result: " + part1.processLines(productionLines));
         } else {
             System.out.println("Error on Part1");

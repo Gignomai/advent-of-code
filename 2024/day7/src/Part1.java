@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -6,53 +5,57 @@ import static java.lang.Math.pow;
 
 public class Part1 {
 
-    public Integer processLines(List<String> lines) {
-        int total = 0;
+    public Long processLines(List<String> lines) {
+        long total = 0;
+
         for (String line : lines) {
-            int testValue = Integer.parseInt(line.split(":")[0]);
-            List<Integer> nums = Stream.of(line.split(":")[1].trim().split(" "))
-                    .map(Integer::parseInt)
+            long testValue = Long.parseLong(line.split(":")[0]);
+            List<Long> numbers = Stream.of(line.split(":")[1].trim().split(" "))
+                    .map(Long::parseLong)
                     .toList();
 
-            if (canBeProduced(testValue, nums)) {
+            if (canBeProduced(testValue, numbers)) {
                 total += testValue;
             }
-
         }
 
-        System.out.println("total = " + total);
         return total;
     }
 
-    private boolean canBeProduced(int testValue, List<Integer> numbers) {
-        String[] operators = {"+", "*"};
+    private boolean canBeProduced(long testValue, List<Long> numbers) {
+        int operatorsLength = numbers.size() - 1;
+        double combinations = pow(2, operatorsLength);
 
-        double combinations = pow(2, numbers.size() - 1);
-        System.out.println("combinations = " + (int) combinations);
         for (int i = 0; i < combinations; i++) {
-            for (int j = 0; j < numbers.size() - 1; j++) {
+            String combination = convertToBinary(i, operatorsLength);
 
-
-                for (int n = 0; n < 2; n++) {
-                    System.out.println(operators.get(n));
+            long result = numbers.get(0);
+            for (int j = 1; j < numbers.size(); j++) {
+                if (combination.charAt(j - 1) == '0') {
+                    result += numbers.get(j);
+                } else {
+                    result *= numbers.get(j);
                 }
             }
 
-
-//            StringBuilder num = new StringBuilder();
-//            for (int j = 0; j < numbers.size(); j++) {
-//                num.append(numbers.get(j));
-//                if (j < numbers.size() - 1) {
-//                    num.append(operators.get(i + j));
-//                }
-//            }
-//            System.out.println(num.toString().trim());
+            if (result == testValue) {
+                return true;
+            }
         }
 
         return false;
     }
 
+    private static String convertToBinary(int number, int length) {
+        StringBuilder indexes = new StringBuilder(Integer.toBinaryString(number));
+        int requiredLength = length - indexes.length();
+        for (int j = 0; j < requiredLength; j++) {
+            indexes.insert(0, "0");
+        }
+        return indexes.toString();
+    }
+
     public boolean test(List<String> lines) {
-        return processLines(lines).equals(3749);
+        return processLines(lines).equals(3749L);
     }
 }
